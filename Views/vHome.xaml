@@ -2,61 +2,75 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="JGualpa_TC_S5_PA.Views.vHome"
-             Title="vHome">
+             Title="CRUD SQLite">
     <VerticalStackLayout
         Padding="20"
-        Spacing="20">
-        <Label 
-            Text="Semana 5 SQLite"
-            VerticalOptions="Center" 
-            FontSize="20"
-            HorizontalOptions="Center" />
+        Spacing="10">
+        <Label
+            Text="Gestión de Personas (SQLite)" VerticalOptions="Center"
+            FontSize="22" HorizontalOptions="Center" />
+
         <Entry x:Name="txtNombre"
-               Placeholder="Ingrese su nombre"/>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+               Placeholder="Ingrese nombre"/>
+
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
             <Button x:Name="btnInsertar"
-                Text="Insertar Dato"
-                Clicked="btnInsertar_Clicked"
-                Grid.Row="0"
-                Grid.Column="0"/>
-            <Label x:Name="statusMessage"
-                   FontSize="18"
-                   TextColor="Red"
-                   Grid.Row="1"
-                   Grid.Column="0"/>
-            <Button x:Name="btnListar"
-                    Text="Listar personas"
-                    Clicked="btnListar_Clicked"
-                    Grid.Row="2"
-                    Grid.Column="0"/>
-            <CollectionView x:Name="ListPersonas"
-                            Grid.Row="3">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Id}"
-                                   Grid.Column="0"/>
-                            <Label Text="{Binding Name}"
-                                   Grid.Column="1"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
+                    Text="Insertar"
+                    Clicked="btnInsertar_Clicked"/>
+
+            <Button x:Name="btnActualizar"
+                    Text="Actualizar"
+                    IsVisible="False" Clicked="btnActualizar_Clicked"
+                    BackgroundColor="Orange"/>
+            <Button x:Name="btnCancelar"
+                    Text="Cancelar"
+                    IsVisible="False" Clicked="btnCancelar_Clicked"
+                    BackgroundColor="Gray"/>
+        </HorizontalStackLayout>
+
+        <Label x:Name="lblModo"
+               FontSize="16"
+               TextColor="Blue"
+               HorizontalOptions="Center"
+               IsVisible="False"/>
+        <Label x:Name="statusMessage"
+               FontSize="14" TextColor="Red"
+               HorizontalOptions="CenterAndExpand"/>
+        <Button x:Name="btnListar"
+                Text="Listar Personas"
+                Clicked="btnListar_Clicked"
+                Margin="0,10,0,0"/>
+        <CollectionView x:Name="ListPersonas"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="5" ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="{Binding Id}"
+                               Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Name}"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                        <Button Text="Editar"
+                                Grid.Column="2"
+                                Clicked="OnEditClicked"
+                                FontSize="12" Padding="5,0" HeightRequest="30" VerticalOptions="Center"/>
+                        <Button Text="Eliminar"
+                                Grid.Column="3"
+                                Clicked="OnDeleteClicked"
+                                FontSize="12" Padding="5,0" HeightRequest="30" VerticalOptions="Center"
+                                BackgroundColor="Red"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
     </VerticalStackLayout>
 </ContentPage>

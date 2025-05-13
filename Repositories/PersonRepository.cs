@@ -12,7 +12,7 @@ namespace JGualpa_TC_S5_PA.Repositories
     {
         string dbPath;
         private SQLiteConnection conn;
-        public string statusMessage {  get; set; }
+        public string statusMessage { get; set; }
 
         public PersonRepository(string path)
         {
@@ -26,7 +26,8 @@ namespace JGualpa_TC_S5_PA.Repositories
             conn = new(dbPath);
             conn.CreateTable<Persona>();
         }
-        public void AddNewPerson(string name) 
+
+        public void AddNewPerson(string name)
         {
             int result = 0;
             try
@@ -35,14 +36,14 @@ namespace JGualpa_TC_S5_PA.Repositories
                 if (string.IsNullOrEmpty(name))
                     throw new Exception("El nombre es requerido");
 
-                Persona person = new() { Name=name };
+                Persona person = new() { Name = name };
                 result = conn.Insert(person);
-                statusMessage = string.Format("Dato ingresado");
+                statusMessage = string.Format($"Dato ingresado ({result} fila(s) afectadas)"); 
             }
             catch (Exception ex)
             {
 
-                statusMessage = string.Format("ERROR "+ ex);
+                statusMessage = string.Format("ERROR al insertar: " + ex.Message); 
             }
         }
 
@@ -55,10 +56,53 @@ namespace JGualpa_TC_S5_PA.Repositories
             }
             catch (Exception ex)
             {
-
-                statusMessage = string.Format("ERROR" + ex);
+                statusMessage = string.Format("ERROR al listar: " + ex.Message); // Mostrar el mensaje de error
             }
             return new List<Persona>();
+        }
+
+        // *** Nuevo Método para Actualizar ***
+        public void UpdatePerson(Persona person)
+        {
+            try
+            {
+                Init();
+                if (person == null || person.Id <= 0)
+                {
+                    throw new Exception("Datos de persona inválidos para actualizar (ID requerido).");
+                }
+                if (string.IsNullOrEmpty(person.Name))
+                {
+                    throw new Exception("El nombre no puede estar vacío para actualizar.");
+                }
+
+                int result = conn.Update(person); 
+                statusMessage = string.Format($"Dato actualizado ({result} fila(s) afectadas)");
+            }
+            catch (Exception ex)
+            {
+                statusMessage = string.Format($"ERROR al actualizar: {ex.Message}");
+            }
+        }
+
+        // *** Nuevo Método para Eliminar ***
+        public void DeletePerson(int id)
+        {
+            try
+            {
+                Init();
+                if (id <= 0)
+                {
+                    throw new Exception("ID de persona inválido para eliminar.");
+                }
+
+                int result = conn.Delete<Persona>(id); 
+                statusMessage = string.Format($"Dato eliminado ({result} fila(s) afectadas)");
+            }
+            catch (Exception ex)
+            {
+                statusMessage = string.Format($"ERROR al eliminar: {ex.Message}");
+            }
         }
     }
 }
